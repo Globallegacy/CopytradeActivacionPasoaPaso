@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Activación Copytrade — Guía</title>
+<meta name="description" content="Activa tu copytrade en 3 pasos. Estilo claro y profesional inspirado en TradingView.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Inter (cuerpo) + Poppins 700 (títulos) -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
+    --brand:#2f6df6; --brand-2:#60a5fa; --ok:#16a34a; --warn:#d97706;
+    --radius:16px; --shadow:0 6px 18px rgba(17,24,39,.06); --maxw:720px;
+  }
+  *{box-sizing:border-box}
+  html,body{
+    margin:0; padding:0;
+    background:radial-gradient(1000px 380px at 50% -8%, rgba(47,109,246,.10), transparent 60%), var(--bg);
+    color:var(--text); font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; scroll-behavior:smooth;
+  }
+  a{color:var(--brand); text-decoration:none}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 14px}
+
+  header{
+    position:sticky; top:0; z-index:30; backdrop-filter:saturate(180%) blur(10px);
+    background:rgba(255,255,255,.8); border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:12px 6px}
+  .brand{display:flex; align-items:center; gap:10px}
+  .logo{width:28px; height:28px; border-radius:8px; background:linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow:0 0 0 1px rgba(47,109,246,.2), 0 8px 16px rgba(47,109,246,.25)}
+  .brand b{font-family:Poppins; font-weight:700; letter-spacing:.2px}
+  .nav a{padding:8px 10px; color:#374151}
+
+  h1,h2,h3{font-family:Poppins, Inter; font-weight:700; letter-spacing:.2px; margin:0 0 6px; line-height:1.1}
+  h1{font-size:26px; text-align:center; margin:12px auto 8px; max-width:26ch}
+  h2{font-size:20px; text-align:center}
+  h3{font-size:18px; text-align:center}
+
+  .hero{padding:22px 0 10px}
+  .lead{color:var(--muted); text-align:center; margin:0 auto 10px; max-width:42ch; font-size:14px}
+  .kpis{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:12px 0 8px}
+  .kpis span{font-size:12px; padding:8px 10px; border-radius:999px; background:#fff; border:1px solid var(--line); box-shadow:var(--shadow)}
+  .row{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; background:linear-gradient(180deg, var(--brand), #1f5de9); color:#fff; font-weight:800; box-shadow:0 8px 18px rgba(47,109,246,.35)}
+  .btn.ghost{background:#fff; color:#1f2937; border:1px solid var(--line); font-weight:700; box-shadow:var(--shadow)}
+  .note{color:var(--muted); font-size:12px; text-align:center; margin:8px 0 0}
+
+  /* Barra de progreso */
+  .progress{
+    position:sticky; top:56px; z-index:20;
+    background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.98));
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    box-shadow:0 4px 14px rgba(17,24,39,.04);
+  }
+  .progress-in{max-width:var(--maxw); margin:0 auto; padding:10px 14px}
+  .progress-top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:8px}
+  .progress-top .label{font-size:12px; color:#374151}
+  .progress-top .count{font-size:12px; color:#111827; font-weight:700}
+  .track{position:relative; height:6px; border-radius:999px; background:#eef2ff; overflow:hidden; border:1px solid var(--line)}
+  .fill{position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg, var(--brand), var(--brand-2)); transition:width .35s ease; border-radius:999px}
+  .dots{display:flex; justify-content:space-between; align-items:center; margin-top:8px}
+  .dot{
+    position:relative; width:24px; height:24px; border-radius:50%; background:#fff; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:11px; color:#475569; box-shadow:var(--shadow)
+  }
+  .dot.active{border-color:transparent; color:#fff; background:linear-gradient(180deg, var(--brand), #1f5de9)}
+  .dot.done{color:#065f46; background:#ecfdf5; border-color:#a7f3d0}
+  .dot::after{
+    content:attr(data-tip);
+    position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+    background:#111827; color:#fff; font-size:11px; padding:6px 8px; border-radius:8px; white-space:nowrap;
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; border:1px solid rgba(255,255,255,.08);
+  }
+  .dot::before{
+    content:""; position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+    border:6px solid transparent; border-top-color:#111827; opacity:0; transition:opacity .2s ease;
+  }
+  .dot:hover::after, .dot:hover::before{ opacity:1 }
+  .dot.active::after, .dot.active::before{ opacity:1 }
+  .dot.active::after{ transform:translateX(-50%) translateY(-2px) }
+
+  /* Cards pasos / info */
+  section.steps{padding:14px 0 90px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
+  .step{padding:16px; margin:12px 0}
+  .step h3{margin-bottom:4px}
+  .mini{font-size:13px; color:var(--muted); text-align:center; margin:0 auto 8px; max-width:44ch}
+
+  .short{
+    width:100%; max-width:420px; aspect-ratio:9/16; display:block; margin:12px auto 0;
+    border:1px solid var(--line); border-radius:14px; background:#0b1224; box-shadow:var(--shadow)
+  }
+
+  .warn{margin:8px auto; max-width:560px; font-size:12.5px; text-align:center; color:#7c3a00; background:#fff7ed; border:1px solid #fed7aa; padding:8px 10px; border-radius:12px}
+  .min-inv{margin:8px auto; max-width:560px; font-size:12.5px; text-align:center; color:#0b3d6b; background:#eff6ff; border:1px solid #bfdbfe; padding:8px 10px; border-radius:12px}
+
+  .callout{
+    margin:10px auto 8px; max-width:600px; text-align:center; position:relative;
+    padding:12px 14px; border-radius:14px; font-weight:800; color:#0b2b6b;
+    background:linear-gradient(180deg, #e8f1ff, #ddebff); border:1px solid #c7dbff;
+  }
+  .callout small{display:block; font-weight:700; opacity:.9; color:#123e87}
+
+  .tipo-cuenta{
+    width:100%; max-width:640px; display:block; margin:10px auto 4px; border-radius:14px;
+    border:1px solid var(--line); background:#0b1224; cursor:zoom-in; box-shadow:var(--shadow);
+    transition:transform .18s ease;
+  }
+  .tipo-cuenta:hover{ transform:scale(1.01) }
+
+  /* Caja de notificación (extra) */
+  .info{
+    padding:16px; margin:12px 0; border-left:4px solid var(--brand);
+  }
+  .info h3{margin-bottom:6px}
+  .info p{margin:6px auto 10px; color:var(--muted); text-align:center; max-width:46ch; font-size:13px}
+  .check{
+    margin:6px auto 10px; max-width:520px; display:grid; gap:6px; padding:0 6px;
+  }
+  .item{
+    display:flex; align-items:flex-start; gap:8px; background:#ffffff; border:1px solid var(--line); border-radius:12px; padding:8px 10px; box-shadow:var(--shadow)
+  }
+  .badge{
+    flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px;
+  }
+  .item b{display:block; font-size:13px; color:#0f172a}
+  .item span{display:block; font-size:12px; color:#475569}
+
+  /* Sticky CTA móvil */
+  .sticky-cta{
+    position:fixed; left:0; right:0; bottom:0; z-index:40;
+    background:linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.92) 24%, rgba(255,255,255,.98));
+    border-top:1px solid var(--line); padding:10px 14px 14px;
+  }
+  .sticky-in{max-width:var(--maxw); margin:0 auto; display:flex; gap:10px; align-items:center; justify-content:space-between}
+  .sticky-in .txt{font-size:12.5px; color:#374151}
+  .sticky-btn{flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; padding:12px 16px; border-radius:12px; background:linear-gradient(180deg, var(--brand), #1f5de9); color:#fff; font-weight:800; box-shadow:0 10px 20px rgba(47,109,246,.35)}
+
+  .lightbox{ position:fixed; inset:0; z-index:100; background:rgba(0,0,0,.86); display:none; align-items:center; justify-content:center; padding:16px }
+  .lightbox.show{ display:flex; animation:fade .18s ease-out }
+  .lightbox img{ max-width:96vw; max-height:90vh; border-radius:12px; box-shadow:0 18px 50px rgba(0,0,0,.5) }
+  .lightbox .hint{ position:fixed; bottom:12px; left:0; right:0; text-align:center; color:#e5edff; font-size:12px; opacity:.85 }
+  @keyframes fade{ from{opacity:0} to{opacity:1} }
+  .no-scroll{ overflow:hidden }
+
+  .reveal{opacity:0; transform:translateY(12px); transition:opacity .55s ease, transform .55s ease}
+  .reveal.show{opacity:1; transform:translateY(0)}
+  .d1{transition-delay:.08s} .d2{transition-delay:.16s} .d3{transition-delay:.24s}
+
+  @media (min-width: 900px){
+    h1{font-size:32px} .lead{font-size:15px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <b>Activación Copytrade</b>
+    </div>
+    <nav><a href="#pasos">Pasos</a></nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 class="reveal d1">Activa tu Copytrade en 3 pasos</h1>
+    <p class="lead reveal d2">Diseño claro inspirado en TradingView. Sigue el flujo y listo.</p>
+    <div class="kpis reveal d3">
+      <span>Inversión mínima recomendada <b>$200 USD</b></span>
+      <span><b>MT5</b> por defecto</span>
+      <span>Activación: <b>5–24 h</b></span>
+    </div>
+    <div class="row reveal d3">
+      <a class="btn" href="#registro">Empezar</a>
+      <a class="btn ghost" href="#pasos">Ver pasos</a>
+    </div>
+    <div class="note reveal d3">Usa tus datos reales y comprobante de dirección ≤ 90 días a tu nombre.</div>
+  </div>
+</section>
+
+<!-- PROGRESS WIDGET -->
+<div class="progress" id="progress">
+  <div class="progress-in">
+    <div class="progress-top">
+      <span class="label">Progreso</span>
+      <span class="count" id="progressCount">Paso 1 de 3</span>
+    </div>
+    <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+    <div class="dots" aria-hidden="true">
+      <div class="dot active" id="dot1" data-tip="Registro">1</div>
+      <div class="dot" id="dot2" data-tip="Fondeo">2</div>
+      <div class="dot" id="dot3" data-tip="MT5 / Monitoreo">3</div>
+    </div>
+  </div>
+</div>
+
+<section id="pasos" class="steps">
+  <div class="wrap">
+
+    <!-- PASO 1 -->
+    <article class="card step reveal" id="registro">
+      <h3>1) Regístrate en el broker (y verificación)</h3>
+      <p class="mini">Abre el enlace oficial, crea tu cuenta y completa la verificación (ID + comprobante ≤ 90 días).</p>
+
+      <div class="warn"><b>¿Ya tienes cuenta en STARTRADER?</b> No abras una nueva. Pasa directo al <b>Paso 2</b>.</div>
+      <div class="min-inv">Inversión mínima recomendada: <b>$200 USD</b>.</div>
+
+      <div class="callout">Tipo de cuenta recomendado
+        <small>Plataforma por defecto: <b>MetaTrader 5 (MT5)</b>.</small>
+      </div>
+
+      <img class="tipo-cuenta"
+        src="https://github.com/Globallegacy/ActivacionCopytrade/blob/cc11a6e79828c48b2ab9415d716abdeddbb2dfff/Captura%20de%20pantalla%202025-10-13%20200201.png?raw=1"
+        alt="Tipo de cuenta recomendado"
+        loading="lazy" tabindex="0" role="button"
+        aria-label="Abrir imagen ampliada: tipo de cuenta recomendado" />
+
+      <iframe class="short"
+        src="https://www.youtube.com/embed/7mJygLzVN_Q?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+        title="Paso 1 - Registro y verificación"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+
+      <div class="row" style="margin-top:12px">
+        <a class="btn"
+           href="https://www.startrader.com/live-account/?affid=MTcwOTI0MDU=&ibpRebateCode=MTcwOTI0MDVTVDEwMDI1"
+           target="_blank" rel="noopener">Abrir registro</a>
+      </div>
+    </article>
+
+    <!-- PASO 2 -->
+    <article class="card step reveal d1" id="fondeo">
+      <h3>2) Fondear tu cuenta</h3>
+      <p class="mini">Sigue este corto para depositar fondos. Recuerda el mínimo recomendado de <b>$200 USD</b>.</p>
+      <iframe class="short"
+        src="https://www.youtube.com/embed/FJHPTpimOx0?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+        title="Paso 2 - Fondear cuenta"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+    </article>
+
+    <!-- PASO 3 -->
+    <article class="card step reveal" id="mt5">
+      <h3>3) Conecta MT5 y monitorea resultados</h3>
+      <p class="mini">Usa este video para enlazar tu cuenta y ver operaciones/estadísticas.</p>
+      <iframe class="short"
+        src="https://www.youtube.com/embed/37vMK86Z1W8?rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+        title="Paso 3 - Enlazar MT5 y monitorear resultados"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen loading="lazy"></iframe>
+    </article>
+
+    <!-- CAJA EXTRA: Notificar depósitos/retiros -->
+    <article class="card info reveal" id="notificar">
+      <h3>Notificar depósitos / retiros (obligatorio)</h3>
+      <p>Para mantener tu estrategia calibrada y evitar desbalances de riesgo, <b>avisa cada vez que deposites o retires</b>. El equipo ajusta el tamaño de lote y parámetros de riesgo con base en tu capital actualizado.</p>
+
+      <div class="check">
+        <div class="item">
+          <div class="badge">1</div>
+          <div>
+            <b>Comparte evidencia</b>
+            <span>Imagen o pantallazo del backoffice/MT5 mostrando <i>monto</i>, <i>fecha</i> y <i>saldo actual</i>.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="badge">2</div>
+          <div>
+            <b>Incluye tus datos</b>
+            <span>Nombre completo y número de cuenta/ID en el broker.</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="badge">3</div>
+          <div>
+            <b>Envía por Telegram</b>
+            <span>Usa el canal oficial para registrar el cambio y activar el ajuste.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:6px">
+        <a class="btn" href="https://t.me/+lijy2vcx8DliMjdh" target="_blank" rel="noopener">Reportar en Telegram</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- Sticky CTA móvil -->
+<div class="sticky-cta">
+  <div class="sticky-in">
+    <div class="txt">¿Listo para activar? Regístrate en el broker.</div>
+    <a class="sticky-btn" href="https://www.startrader.com/live-account/?affid=MTcwOTI0MDU=&ibpRebateCode=MTcwOTI0MDVTVDEwMDI1" target="_blank" rel="noopener">Abrir registro</a>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada de la imagen">
+  <img id="lightboxImg" alt="Imagen ampliada" />
+  <div class="hint">Toca cualquier parte o presiona Esc para cerrar</div>
+</div>
+
+<script>
+  // Reveals
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target); }});
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal, .tipo-cuenta, .callout, .warn, .min-inv, .info').forEach(el=> io.observe(el));
+
+  // Lightbox
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightboxImg');
+  function abrirLB(src){ lbImg.src = src; lb.classList.add('show'); document.body.classList.add('no-scroll'); }
+  function cerrarLB(){ lb.classList.remove('show'); document.body.classList.remove('no-scroll'); setTimeout(()=> lbImg.removeAttribute('src'), 150); }
+  document.querySelectorAll('.tipo-cuenta').forEach(img=>{
+    img.addEventListener('click', ()=> abrirLB(img.src));
+    img.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ abrirLB(img.src); }});
+  });
+  lb.addEventListener('click', cerrarLB);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && lb.classList.contains('show')) cerrarLB(); });
+
+  // Progreso dinámico (3 pasos)
+  const sections = [
+    { id:'registro', dot:'dot1', idx:1 },
+    { id:'fondeo',   dot:'dot2', idx:2 },
+    { id:'mt5',      dot:'dot3', idx:3 },
+  ];
+  const dots = sections.map(s => document.getElementById(s.dot));
+  const fill = document.getElementById('progressFill');
+  const count = document.getElementById('progressCount');
+
+  function updateProgress(){
+    const mid = window.innerHeight * 0.45;
+    let activeIdx = 1;
+    for(const s of sections){
+      const el = document.getElementById(s.id);
+      if(!el) continue;
+      const rect = el.getBoundingClientRect();
+      if(rect.top <= mid) activeIdx = s.idx;
+    }
+    dots.forEach((d,i)=>{
+      d.classList.toggle('active', i+1 === activeIdx);
+      d.classList.toggle('done', i+1 < activeIdx);
+    });
+    const widths = {1:0, 2:50, 3:100};
+    fill.style.width = widths[activeIdx] + '%';
+    count.textContent = `Paso ${activeIdx} de 3`;
+  }
+  updateProgress();
+  window.addEventListener('scroll', updateProgress);
+  window.addEventListener('resize', updateProgress);
+
+  // Anclas suaves
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+</script>
+</body>
+</html>
